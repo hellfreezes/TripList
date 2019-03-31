@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<TripListSheet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Waypoints>
+    <Waypoint>
+      <Id>1</Id>
+      <Date>2019-03-30T19:08:52.1767783+07:00</Date>
+      <DepartureTime>2019-03-30T10:30:00</DepartureTime>
+      <ArriveTime>2019-03-30T11:00:00</ArriveTime>
+      <DepartureAddress>Абытаевская, 6</DepartureAddress>
+      <ArriveAddress>78 Добр бр, 14А</ArriveAddress>
+      <Distance>5</Distance>
+    </Waypoint>
+    <Waypoint>
+      <Id>2</Id>
+      <Date>2019-03-30T19:08:52.1777786+07:00</Date>
+      <DepartureTime>2019-03-30T11:20:00</DepartureTime>
+      <ArriveTime>2019-03-30T11:40:00</ArriveTime>
+      <DepartureAddress>78 Добр бр, 14А</DepartureAddress>
+      <ArriveAddress>Никитина, 8а</ArriveAddress>
+      <Distance>10</Distance>
+    </Waypoint>
+  </Waypoints>
+</TripListSheet>

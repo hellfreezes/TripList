@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Vehicle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DriverName>Ноздрин Дмитрий Игоревич</DriverName>
+  <VehicleModel>Subaru-Forester</VehicleModel>
+  <Plate>У 380 ОЕ 124</Plate>
+  <Gasoline>АИ95</Gasoline>
+  <GasMileage>13.3</GasMileage>
+</Vehicle>
