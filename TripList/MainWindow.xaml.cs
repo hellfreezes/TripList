@@ -29,12 +29,16 @@ namespace TripList
         private Vehicle vehicle;
         private Excel excel;
         private TripListSheet tripList;
+        private List<TripTicket> tripLists;
         
         private WaypointsWindow windowWaypoints;
         private BusinessDaysWindow windowBusinessDays;
 
         private string EXE_DIRECTORY;
+        // Нужно ли создавать новый маршрутный лист если день закончен а топливо еще осталось
+        public const bool DIVIDE_TRIPTICKETS = true;
 
+        private int currentSheet = 0;
         private static MainWindow instance;
         public static MainWindow Instance
         {
@@ -55,7 +59,9 @@ namespace TripList
 
             vehicle = new Vehicle();
             tripList = new TripListSheet();
+            tripLists = new List<TripTicket>();
 
+            dpReceiptDate.Text = DateTime.Now.ToShortDateString();
             dgTripList.ItemsSource = tripList.Waypoints;
 
             EXE_DIRECTORY = GetExeDirectory();
@@ -68,11 +74,18 @@ namespace TripList
             return int.Parse(tbLiters.Text);
         }
 
-        public double GetGasRate()
+        public double GetGasRateSummer()
         {
             // Добавить числа на поле
 
-            return double.Parse(tbGasMileage.Text);
+            return double.Parse(tbGasMileageSummer.Text);
+        }
+
+        public double GetGasRateWinter()
+        {
+            // Добавить числа на поле
+
+            return double.Parse(tbGasMileageWinter.Text);
         }
 
         public DateTime GetReceiptDate()
@@ -114,7 +127,8 @@ namespace TripList
             vehicle.VehicleModel = tbVehicleName.Text;
             vehicle.Plate = tbPlate.Text;
             vehicle.Gasoline = tbGasoline.Text;
-            vehicle.GasMileage = float.Parse(tbGasMileage.Text);
+            vehicle.GasMileageSummer = float.Parse(tbGasMileageSummer.Text);
+            vehicle.GasMileageWinter = float.Parse(tbGasMileageWinter.Text);
         }
 
         //Извлечь значение из Vehicle объекта в элементы формы
@@ -124,7 +138,8 @@ namespace TripList
             tbVehicleName.Text = vehicle.VehicleModel;
             tbPlate.Text = vehicle.Plate;
             tbGasoline.Text = vehicle.Gasoline;
-            tbGasMileage.Text = vehicle.GasMileage.ToString();
+            tbGasMileageSummer.Text = vehicle.GasMileageSummer.ToString();
+            tbGasMileageWinter.Text = vehicle.GasMileageWinter.ToString();
         }
 
         private void MnuTest1_Click(object sender, RoutedEventArgs e)
@@ -252,6 +267,60 @@ namespace TripList
         {
             windowWaypoints.Owner = this;
             windowBusinessDays.Owner = this;
+        }
+
+        private void BtnPOIGenerate_Click(object sender, RoutedEventArgs e)
+        {
+            TripTicket tripTicket = new TripTicket();
+
+            tripLists = new List<TripTicket>();
+
+            tripLists.Add(tripTicket);
+
+            NextTripTicket ntt = tripTicket.Generate();
+
+            while (ntt != null)
+            {
+                tripTicket = new TripTicket(ntt.Liters, ntt.Date);
+                ntt = tripTicket.Generate();
+                tripLists.Add(tripTicket);
+            }
+
+            currentSheet = 0;
+            ShowTrackListSheet();
+
+        }
+
+        private void ShowTrackListSheet()
+        {
+            tripList.Clear();
+            int i = 0;
+            foreach (POI p in tripLists[currentSheet].GetPOIs())
+            {
+                i++;
+
+                string next = "";
+                if (p.next != null)
+                {
+                    next = p.next.address.POIAddress.ToString();
+                }
+
+                if (p.next != null)
+                {
+                    tripList.AddWaypoint(new Waypoint()
+                    {
+                        Id = i,
+                        Date = p.FullDate,
+                        DepartureTime = p.timeDeparture,
+                        ArriveTime = p.timeArrive,
+                        DepartureAddress = p.address.POIAddress.ToString(),
+                        ArriveAddress = next,
+                        Distance = p.distToNext
+                    });
+                }
+            }
+
+            tbDistance.Text = tripLists[currentSheet].TotalRealDistance.ToString();
         }
     }
 }

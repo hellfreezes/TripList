@@ -23,6 +23,11 @@ namespace TripList
             Waypoints.Add(wp);
         }
 
+        public void Clear()
+        {
+            Waypoints.Clear();
+        }
+
         public void Save(string filename)
         {
             if (File.Exists(filename))

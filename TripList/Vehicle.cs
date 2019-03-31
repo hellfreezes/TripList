@@ -17,7 +17,8 @@ namespace TripList
         public string VehicleModel { get; set; }
         public string Plate { get; set; }
         public string Gasoline { get; set; }
-        public float GasMileage { get; set; }
+        public float GasMileageSummer { get; set; }
+        public float GasMileageWinter { get; set; }
 
         public void Save()
         {

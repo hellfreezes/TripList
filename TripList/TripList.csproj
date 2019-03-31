@@ -65,6 +65,7 @@
       <DependentUpon>BusinessDaysWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Excel.cs" />
+    <Compile Include="NextTripTicket.cs" />
     <Compile Include="POI.cs" />
     <Compile Include="TripListSheet.cs" />
     <Compile Include="TripTicket.cs" />
