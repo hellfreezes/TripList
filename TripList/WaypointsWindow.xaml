@@ -1,0 +1,31 @@
+﻿<Window x:Name="winWaypoints" x:Class="TripList.WaypointsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TripList"
+        mc:Ignorable="d"
+        Title="Адреса и расстояния" Height="450" Width="800" WindowStartupLocation="CenterScreen" Closing="WinWaypoints_Closing">
+    <Grid HorizontalAlignment="Left" Width="792" Height="419" VerticalAlignment="Top">
+        <Button x:Name="btnWaypointAdd" Content="Добавить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnWaypointRemove" Content="Удалить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <DataGrid x:Name="dgAddresses" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFD4D4D4" VerticalGridLinesBrush="#FFD4D4D4" Margin="10,35,10,10">
+            <DataGrid.Columns>
+                <!-- Колонка выбора -->
+                <!--<DataGridTemplateColumn Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+
+                <DataGridTextColumn Header="№ п/п"              Binding="{Binding Id,Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Объект"             Binding="{Binding POIName,Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Адрес"              Binding="{Binding POIAddress,Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Расстояние"         Binding="{Binding Distance,Mode=TwoWay}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="btnImportSQL" Content="Импорт SQL" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnImportSQL_Click"/>
+    </Grid>
+</Window>

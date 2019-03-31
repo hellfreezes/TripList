@@ -5,26 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TripList"
         mc:Ignorable="d"
-        Title="MainWindow" Height="493.566" Width="721.113">
+        Title="Путевые листы by hellfreezes" Height="493.566" Width="721.113" Closing="Window_Closing" Activated="Window_Activated">
     <Grid>
-        <Label Content="ПУТЕВОЙ ЛИСТ" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" VerticalAlignment="Top" Width="104" FontWeight="Bold"/>
-        <Label Content="Серия:" HorizontalAlignment="Left" Margin="119,10,0,0" VerticalAlignment="Top" Height="25"/>
-        <TextBox HorizontalAlignment="Left" Height="25" Margin="171,10,0,0" Text="ЕЕ" VerticalAlignment="Top" Width="27" MaxLines="1"/>
-        <Label Content="Номер:" HorizontalAlignment="Left" Margin="203,10,0,0" VerticalAlignment="Top" Height="25"/>
-        <TextBox HorizontalAlignment="Left" Height="25" Margin="258,10,0,0" Text="100" VerticalAlignment="Top" Width="44" MaxLines="1"/>
-        <DatePicker HorizontalAlignment="Left" Margin="350,11,0,0" VerticalAlignment="Top"/>
-        <Label Content="Дата:" HorizontalAlignment="Left" Margin="307,11,0,0" VerticalAlignment="Top" Height="25"/>
-        <Label Content="по:" HorizontalAlignment="Left" Margin="455,10,0,0" VerticalAlignment="Top" Height="25"/>
-        <DatePicker HorizontalAlignment="Left" Margin="487,11,0,0" VerticalAlignment="Top"/>
-        <GroupBox Header="Автомобиль:" HorizontalAlignment="Left" Height="100" Margin="10,40,0,0" VerticalAlignment="Top" Width="698">
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Данные">
+                    <MenuItem x:Name="mnuLoadVehicle" Header="_Загрузить автомобиль" Click="MnuLoadVehicle_Click" />
+                    <MenuItem x:Name="mnuSaveVehicle" Header="_Сохранить автомобиль" Click="MnuSaveVehicle_Click" />
+                    <Separator />
+                    <MenuItem x:Name="mnuLoadTripListSheet" Header="_Загрузить маршрут" Click="MnuLoadTripListSheet_Click" />
+                    <MenuItem x:Name="mnuSaveTripListSheet" Header="_Сохранить маршрут" Click="MnuSaveTripListSheet_Click" />
+                    <Separator />
+                    <MenuItem x:Name="mnuExportEXCEL" Header="_Экспортировать *.xlsx (Excel)" Click="MnuExportEXCEL_Click" />
+                    <Separator />
+                    <MenuItem x:Name="mnuExit" Header="_Выход" Click="MnuExit_Click"/>
+                </MenuItem>
+                <MenuItem Header="_База">
+                    <MenuItem x:Name="mnuWaypoints" Header="_Адреса и расстояния" Click="MnuWaypoints_Click"/>
+                    <MenuItem x:Name="mnuBusinessDays" Header="_Производственный календарь" Click="MnuBusinessDays_Click"/>
+                </MenuItem>
+                <MenuItem Header="_Тестовые">
+                    <MenuItem x:Name="mnuTest1" Header="_Тест1" Click="MnuTest1_Click"/>
+                    <MenuItem x:Name="mnuTest2" Header="_Тест2" Click="MnuTest2_Click"/>
+                </MenuItem>
+            </Menu>
+            <TextBox AcceptsReturn="True" />
+        </DockPanel>
+
+        <Label Content="ПУТЕВОЙ ЛИСТ" HorizontalAlignment="Left" Height="25" Margin="9,26,0,0" VerticalAlignment="Top" Width="104" FontWeight="Bold"/>
+        <Label Content="Серия:" HorizontalAlignment="Left" Margin="118,26,0,0" VerticalAlignment="Top" Height="25"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="170,26,0,0" Text="ЕЕ" VerticalAlignment="Top" Width="27" MaxLines="1"/>
+        <Label Content="Номер:" HorizontalAlignment="Left" Margin="202,26,0,0" VerticalAlignment="Top" Height="25"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="257,26,0,0" Text="100" VerticalAlignment="Top" Width="44" MaxLines="1"/>
+        <DatePicker x:Name="dpReceiptDate" HorizontalAlignment="Left" Margin="349,27,0,0" VerticalAlignment="Top"/>
+        <Label Content="Дата:" HorizontalAlignment="Left" Margin="306,27,0,0" VerticalAlignment="Top" Height="25"/>
+        <Label Content="по:" HorizontalAlignment="Left" Margin="454,26,0,0" VerticalAlignment="Top" Height="25"/>
+        <DatePicker HorizontalAlignment="Left" Margin="486,27,0,0" VerticalAlignment="Top"/>
+        <GroupBox Header="Автомобиль:" Height="100" Margin="9,56,6,0" VerticalAlignment="Top">
             <Grid Margin="0,0,-3.2,-1.4">
                 <Label Content="Марка:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="64"/>
                 <Label Content="Водитель:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="79,10,0,0" VerticalAlignment="Top" Width="203" Text="Subaru-Forester" MaxLines="1"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="79,40,0,0" VerticalAlignment="Top" Width="203" Text="Ноздрин Дмитрий Игоревич" MaxLines="1"/>
+                <TextBox x:Name="tbVehicleName" HorizontalAlignment="Left" Height="26" Margin="79,10,0,0" VerticalAlignment="Top" Width="203" Text="Subaru-Forester" MaxLines="1"/>
+                <TextBox x:Name="tbDriverName" HorizontalAlignment="Left" Height="26" Margin="79,40,0,0" VerticalAlignment="Top" Width="203" Text="Ноздрин Дмитрий Игоревич" MaxLines="1"/>
                 <Label Content="Гос. номер:" HorizontalAlignment="Left" Margin="287,10,0,0" VerticalAlignment="Top" Width="73"/>
                 <Label Content="Таб. №:" HorizontalAlignment="Left" Margin="287,41,0,0" VerticalAlignment="Top" Width="73" Height="25"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="365,10,0,0" VerticalAlignment="Top" Width="92" Text="У 380 ОЕ 124" MaxLines="1"/>
+                <TextBox x:Name="tbPlate" HorizontalAlignment="Left" Height="26" Margin="365,10,0,0" VerticalAlignment="Top" Width="92" Text="У 380 ОЕ 124" MaxLines="1"/>
                 <TextBox HorizontalAlignment="Left" Height="26" Margin="365,40,0,0" VerticalAlignment="Top" Width="92" MaxLines="1" IsEnabled="False"/>
                 <Label Content="Гараждный №:" HorizontalAlignment="Left" Margin="462,10,0,0" VerticalAlignment="Top" Width="114"/>
                 <Label Content="Удостоверение №:" HorizontalAlignment="Left" Margin="462,41,0,0" VerticalAlignment="Top" Width="114" Height="25"/>
@@ -32,22 +57,114 @@
                 <TextBox HorizontalAlignment="Left" Height="26" Margin="581,40,0,0" VerticalAlignment="Top" Width="92" MaxLines="1" IsEnabled="False"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Топливо:" HorizontalAlignment="Left" Height="100" Margin="10,140,0,0" VerticalAlignment="Top" Width="698">
+        <GroupBox Header="Топливо:" Height="100" Margin="9,156,6,0" VerticalAlignment="Top">
             <Grid Margin="0,0,-3.2,-12.4">
                 <Label Content="Марка:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="127"/>
                 <Label Content="Остаток при выезде:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="127"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="142,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="142,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <TextBox HorizontalAlignment="Left" Height="26" Margin="142,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
+                <TextBox x:Name="tbGasoline" HorizontalAlignment="Left" Height="26" Margin="142,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
                 <Label Content="+ выдано:" HorizontalAlignment="Left" Margin="186,41,0,0" VerticalAlignment="Top" Width="66"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="257,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <TextBox x:Name="tbLiters" HorizontalAlignment="Left" Height="26" Margin="257,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
                 <Label Content="при возвращении, л:" HorizontalAlignment="Left" Margin="301,41,0,0" VerticalAlignment="Top" Width="124"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="430,40,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <TextBox HorizontalAlignment="Left" Height="26" Margin="430,40,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
                 <Label Content="расход л./100:" HorizontalAlignment="Left" Margin="301,10,0,0" VerticalAlignment="Top" Width="124"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="430,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
-                <Label Content="Сдано:" HorizontalAlignment="Left" Margin="474,41,0,0" VerticalAlignment="Top" Width="46"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="525,40,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <TextBox x:Name="tbGasMileage" HorizontalAlignment="Left" Height="26" Margin="430,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <Label Content="Сдано:" HorizontalAlignment="Left" Margin="482,41,0,0" VerticalAlignment="Top" Width="46"/>
+                <TextBox HorizontalAlignment="Left" Height="26" Margin="577,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
+                <Label Content="Время выезда:" HorizontalAlignment="Left" Margin="482,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbTime" HorizontalAlignment="Left" Height="26" Margin="577,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="39"/>
+
             </Grid>
         </GroupBox>
-        <DataGrid HorizontalAlignment="Left" Height="100" Margin="10,245,0,0" VerticalAlignment="Top" Width="694"/>
+        <GroupBox Header="Маршрут:" Height="192" Margin="10,261,5,0" VerticalAlignment="Top">
+            <Grid Margin="0,0,-3.2,-12.4">
+                <DataGrid x:Name="dgTripList" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFD4D4D4" VerticalGridLinesBrush="#FFD4D4D4" Margin="10,35,10.2,10.4" SelectedCellsChanged="DgTripList_SelectedCellsChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="№ п/п"              Binding="{Binding Id,Mode=TwoWay}"/>
+                        <DataGridTemplateColumn Header="Дата">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Date, StringFormat=\{0:dd.MM.yyyy\}}"/>
+                                    <!-- \{0:dd.MM.yy HH:mm:ss\} -->
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <DatePickerTextBox Text="{Binding Date,Mode=TwoWay,StringFormat=\{0:dd.MM.yyyy\}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Время отправления">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DepartureTime, StringFormat=\{0:HH:mm\}}"/>
+                                    <!-- \{0:dd.MM.yy HH:mm:ss\} -->
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <DatePickerTextBox Text="{Binding DepartureTime,Mode=TwoWay,StringFormat=\{0:HH:mm\}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Время прибытия">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ArriveTime, StringFormat=\{0:HH:mm\}}"/>
+                                    <!-- \{0:dd.MM.yy HH:mm:ss\} -->
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <DatePickerTextBox Text="{Binding ArriveTime,Mode=TwoWay,StringFormat=\{0:HH:mm\}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Адрес отправления">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DepartureAddress}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding DepartureAddress,Mode=TwoWay}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Адрес прибытия"     Binding="{Binding ArriveAddress,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="КМ"                 Binding="{Binding Distance,Mode=TwoWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button x:Name="btnTripListSheetAddEmpty" Content="Добавить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnTripListSheetAddEmpty_Click"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>
