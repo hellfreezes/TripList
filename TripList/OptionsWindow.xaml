@@ -1,0 +1,54 @@
+﻿<Window x:Class="TripList.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TripList"
+        mc:Ignorable="d"
+        Title="Настройки" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+    <Grid>
+        <GroupBox Header="Детальные настройки" Height="162" Margin="10,10,10,0" VerticalAlignment="Top">
+            <Grid Margin="10,10,-2,2">
+                <Label Content="Допустимая погрешность, км:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbInaccuracy" HorizontalAlignment="Left" Height="23" Margin="210,13,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="29"/>
+                <Label Content="Нужно ли возвращать на базу:" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="cbBackToBase" HorizontalAlignment="Left" Margin="210,41,0,0" VerticalAlignment="Top" Width="59" SelectedIndex="0" IsEnabled="False">
+                    <ComboBoxItem>true</ComboBoxItem>
+                    <ComboBoxItem>false</ComboBoxItem>
+                </ComboBox>
+                <Label Content="Средняя скорость движения:" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbAverageSpeed" HorizontalAlignment="Left" Height="23" Margin="210,70,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="29"/>
+                <Label Content="Простой в точках маршрута, мин:" HorizontalAlignment="Left" Margin="10,98,0,0" VerticalAlignment="Top" Width="195"/>
+                <TextBox x:Name="tbPause" HorizontalAlignment="Left" Height="23" Margin="210,101,0,0" TextWrapping="Wrap" Text="15" VerticalAlignment="Top" Width="29"/>
+                <Label Content="Непереносимый остаток бензина, л.:" HorizontalAlignment="Left" Margin="283,10,0,0" VerticalAlignment="Top"/>
+                <Label Content="Начало рабочего дня (чч:мм):" HorizontalAlignment="Left" Margin="283,36,0,0" VerticalAlignment="Top"/>
+                <Label Content="Конец рабочего дня (чч:мм):" HorizontalAlignment="Left" Margin="283,67,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbFuelLost" HorizontalAlignment="Left" Height="23" Margin="501,13,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="29"/>
+                <TextBox x:Name="tbStartOfWorkDay" HorizontalAlignment="Left" Height="23" Margin="501,42,0,0" TextWrapping="Wrap" Text="9:00" VerticalAlignment="Top" Width="52"/>
+                <TextBox x:Name="tbEndOfWorkDay" HorizontalAlignment="Left" Height="23" Margin="501,70,0,0" TextWrapping="Wrap" Text="18:00" VerticalAlignment="Top" Width="52"/>
+                <CheckBox x:Name="chkContrgent" Content="Передавать Контрагента" HorizontalAlignment="Left" Margin="559,13,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="chkObject" Content="Передавать Объект" HorizontalAlignment="Left" Margin="559,42,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="chkAddress" Content="Передавать Адрес" HorizontalAlignment="Left" Margin="559,70,0,0" VerticalAlignment="Top"/>
+            </Grid>
+
+        </GroupBox>
+        <GroupBox Header="Водители:" Margin="10,177,10,10">
+            <Grid Margin="10,10,-2,3">
+                <DataGrid x:Name="dgVehicles" SelectionUnit="FullRow" SelectionMode="Single" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFD4D4D4" VerticalGridLinesBrush="#FFD4D4D4" Margin="10,35,10,10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Имя водителя"       Binding="{Binding DriverName,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Водитель подпись"       Binding="{Binding ShortDriverName,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="№ в/у"       Binding="{Binding License,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Марка автомобиля"       Binding="{Binding VehicleModel,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Гос. номер"       Binding="{Binding Plate,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Марка топлива"       Binding="{Binding Gasoline,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Летний расход, л/100"       Binding="{Binding GasMileageSummer,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Зимний расход, л/100"       Binding="{Binding GasMileageWinter,Mode=TwoWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button x:Name="btnRemove" Content="Удалить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnRemove_Click"/>
+            </Grid>
+        </GroupBox>
+
+    </Grid>
+</Window>

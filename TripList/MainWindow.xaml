@@ -5,18 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TripList"
         mc:Ignorable="d"
-        Title="Путевые листы by hellfreezes" Height="493.566" Width="949.073" Closing="Window_Closing" Activated="Window_Activated">
+        Title="Путевые листы by hellfreezes" Height="566.764" Width="1031.683" Closing="Window_Closing" Activated="Window_Activated">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_Данные">
-                    <MenuItem x:Name="mnuLoadVehicle" Header="_Загрузить автомобиль" Click="MnuLoadVehicle_Click" />
+                    <MenuItem x:Name="mnuOptions" Header="_Настройки" Click="MnuOptions_Click" />
+                    <!--<MenuItem x:Name="mnuLoadVehicle" Header="_Загрузить автомобиль" Click="MnuLoadVehicle_Click" />
                     <MenuItem x:Name="mnuSaveVehicle" Header="_Сохранить автомобиль" Click="MnuSaveVehicle_Click" />
                     <Separator />
                     <MenuItem x:Name="mnuLoadTripListSheet" Header="_Загрузить маршрут" Click="MnuLoadTripListSheet_Click" />
                     <MenuItem x:Name="mnuSaveTripListSheet" Header="_Сохранить маршрут" Click="MnuSaveTripListSheet_Click" />
                     <Separator />
-                    <MenuItem x:Name="mnuExportEXCEL" Header="_Экспортировать *.xlsx (Excel)" Click="MnuExportEXCEL_Click" />
+                    <MenuItem x:Name="mnuExportEXCEL" Header="_Экспортировать *.xlsx (Excel)" Click="MnuExportEXCEL_Click" />-->
                     <Separator />
                     <MenuItem x:Name="mnuExit" Header="_Выход" Click="MnuExit_Click"/>
                 </MenuItem>
@@ -24,10 +25,11 @@
                     <MenuItem x:Name="mnuWaypoints" Header="_Адреса и расстояния" Click="MnuWaypoints_Click"/>
                     <MenuItem x:Name="mnuBusinessDays" Header="_Производственный календарь" Click="MnuBusinessDays_Click"/>
                 </MenuItem>
-                <MenuItem Header="_Тестовые">
+                <!--<MenuItem Header="_Тестовые">
                     <MenuItem x:Name="mnuTest1" Header="_Тест1" Click="MnuTest1_Click"/>
                     <MenuItem x:Name="mnuTest2" Header="_Тест2" Click="MnuTest2_Click"/>
-                </MenuItem>
+                </MenuItem>-->
+                <MenuItem x:Name="mnuAbout" Header="_О программе" Click="MnuAbout_Click"/>
             </Menu>
             <TextBox AcceptsReturn="True" />
         </DockPanel>
@@ -39,42 +41,45 @@
         <TextBox HorizontalAlignment="Left" Height="25" Margin="257,26,0,0" Text="100" VerticalAlignment="Top" Width="44" MaxLines="1"/>
         <DatePicker x:Name="dpReceiptDate" HorizontalAlignment="Left" Margin="349,27,0,0" VerticalAlignment="Top"/>
         <Label Content="Дата:" HorizontalAlignment="Left" Margin="306,27,0,0" VerticalAlignment="Top" Height="25"/>
-        <Label Content="по:" HorizontalAlignment="Left" Margin="454,26,0,0" VerticalAlignment="Top" Height="25"/>
-        <DatePicker HorizontalAlignment="Left" Margin="486,27,0,0" VerticalAlignment="Top"/>
+        <Label Content="по:" HorizontalAlignment="Left" Margin="555,27,0,0" VerticalAlignment="Top" Height="25"/>
+        <DatePicker HorizontalAlignment="Left" Margin="587,27,0,0" VerticalAlignment="Top" IsEnabled="False"/>
         <GroupBox Header="Автомобиль:" Height="100" Margin="9,56,6,0" VerticalAlignment="Top">
             <Grid Margin="0,0,-3.2,-1.4">
                 <Label Content="Марка:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="64"/>
                 <Label Content="Водитель:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbVehicleName" HorizontalAlignment="Left" Height="26" Margin="79,10,0,0" VerticalAlignment="Top" Width="203" Text="Subaru-Forester" MaxLines="1"/>
-                <TextBox x:Name="tbDriverName" HorizontalAlignment="Left" Height="26" Margin="79,40,0,0" VerticalAlignment="Top" Width="203" Text="Ноздрин Дмитрий Игоревич" MaxLines="1"/>
+                <TextBox x:Name="tbDriverName" HorizontalAlignment="Left" Height="26" Margin="79,40,0,0" VerticalAlignment="Top" Width="203" Text="Ноздрин Дмитрий Игоревич" MaxLines="1" IsEnabled="False"/>
                 <Label Content="Гос. номер:" HorizontalAlignment="Left" Margin="287,10,0,0" VerticalAlignment="Top" Width="73"/>
                 <Label Content="Таб. №:" HorizontalAlignment="Left" Margin="287,41,0,0" VerticalAlignment="Top" Width="73" Height="25"/>
-                <TextBox x:Name="tbPlate" HorizontalAlignment="Left" Height="26" Margin="365,10,0,0" VerticalAlignment="Top" Width="92" Text="У 380 ОЕ 124" MaxLines="1"/>
+                <TextBox x:Name="tbPlate" HorizontalAlignment="Left" Height="26" Margin="365,10,0,0" VerticalAlignment="Top" Width="92" Text="У 380 ОЕ 124" MaxLines="1" IsEnabled="False"/>
                 <TextBox HorizontalAlignment="Left" Height="26" Margin="365,40,0,0" VerticalAlignment="Top" Width="92" MaxLines="1" IsEnabled="False"/>
                 <Label Content="Гараждный №:" HorizontalAlignment="Left" Margin="462,10,0,0" VerticalAlignment="Top" Width="114"/>
                 <Label Content="Удостоверение №:" HorizontalAlignment="Left" Margin="462,41,0,0" VerticalAlignment="Top" Width="114" Height="25"/>
                 <TextBox HorizontalAlignment="Left" Height="26" Margin="581,10,0,0" VerticalAlignment="Top" Width="92" MaxLines="1" IsEnabled="False"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="581,40,0,0" VerticalAlignment="Top" Width="92" MaxLines="1" IsEnabled="False"/>
+                <TextBox x:Name="tbLicense" HorizontalAlignment="Left" Height="26" Margin="581,40,0,0" VerticalAlignment="Top" Width="92" MaxLines="1" IsEnabled="False"/>
+                <ComboBox x:Name="cbVehicle" HorizontalAlignment="Left" Margin="79,13,0,0" VerticalAlignment="Top" Width="203"
+                          ItemsSource="{Binding Path=Vehicles}" DisplayMemberPath="VehicleModel" SelectionChanged="CbVehicle_SelectionChanged"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Топливо:" Height="100" Margin="9,156,6,0" VerticalAlignment="Top">
             <Grid Margin="0,0,-3.2,-12.4">
                 <Label Content="Марка:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="127"/>
                 <Label Content="Остаток при выезде:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="127"/>
-                <TextBox HorizontalAlignment="Left" Height="26" Margin="142,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
-                <TextBox x:Name="tbGasoline" HorizontalAlignment="Left" Height="26" Margin="142,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <TextBox HorizontalAlignment="Left" Height="26" Margin="142,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False" Background="White"/>
+                <TextBox x:Name="tbGasoline" HorizontalAlignment="Left" Height="26" Margin="142,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
                 <Label Content="+ выдано:" HorizontalAlignment="Left" Margin="186,41,0,0" VerticalAlignment="Top" Width="66"/>
-                <TextBox x:Name="tbLiters" HorizontalAlignment="Left" Height="26" Margin="257,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <TextBox x:Name="tbLiters" HorizontalAlignment="Left" Height="26" Margin="257,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" Text="30" TextChanged="TbLiters_TextChanged" PreviewTextInput="TbLiters_PreviewTextInput" Background="#FF86EE7C"/>
                 <Label Content="при возвращении, л:" HorizontalAlignment="Left" Margin="301,41,0,0" VerticalAlignment="Top" Width="124"/>
                 <TextBox HorizontalAlignment="Left" Height="26" Margin="430,40,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
                 <Label Content="расход л./100 (лето):" HorizontalAlignment="Left" Margin="301,10,0,0" VerticalAlignment="Top" Width="124"/>
-                <TextBox x:Name="tbGasMileageSummer" HorizontalAlignment="Left" Height="26" Margin="430,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <TextBox x:Name="tbGasMileageSummer" HorizontalAlignment="Left" Height="26" Margin="430,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
                 <Label Content="Сдано:" HorizontalAlignment="Left" Margin="482,41,0,0" VerticalAlignment="Top" Width="46"/>
                 <TextBox HorizontalAlignment="Left" Height="26" Margin="533,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
                 <Label Content="Время выезда:" HorizontalAlignment="Left" Margin="577,40,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbTime" HorizontalAlignment="Left" Height="26" Margin="672,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="39" Text="10:00"/>
+                <TextBox x:Name="tbTime" HorizontalAlignment="Left" Height="26" Margin="672,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="39" Text="10:00" TextChanged="TbTime_TextChanged" Background="#FF86EE7C"/>
                 <Label Content="расход л./100 (зима):" HorizontalAlignment="Left" Margin="482,10,0,0" VerticalAlignment="Top" Width="124"/>
-                <TextBox x:Name="tbGasMileageWinter" HorizontalAlignment="Left" Height="26" Margin="606,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1"/>
+                <TextBox x:Name="tbGasMileageWinter" HorizontalAlignment="Left" Height="26" Margin="606,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
+                <Label Content="Показание одометра при выезде:" HorizontalAlignment="Left" Margin="650,9,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbOdometerStart" HorizontalAlignment="Left" Height="26" Margin="850,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Text="182000" TextChanged="TbOdometerStart_TextChanged" PreviewTextInput="TbOdometerStart_PreviewTextInput" Background="#FF86EE7C"/>
 
             </Grid>
         </GroupBox>
@@ -165,16 +170,25 @@
                         <DataGridTextColumn Header="КМ"                 Binding="{Binding Distance,Mode=TwoWay}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Button x:Name="btnTripListSheetAddEmpty" Content="Добавить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnTripListSheetAddEmpty_Click"/>
-                <Button x:Name="btnPOIRemove" Content="Удалить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75"/>
-                <Button x:Name="btnROIRemoveAll" Content="Очистить" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75"/>
-                <Button x:Name="btnPOIGenerate" Content="Сгенерировать" HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top" Width="93" Click="BtnPOIGenerate_Click"/>
-                <Label Content="Пройдено, км:" HorizontalAlignment="Left" Margin="771,35,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbDistance" HorizontalAlignment="Left" Height="26" Margin="860,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50"/>
-                <Button x:Name="btnExportXLSX" Content="Экспорт" HorizontalAlignment="Left" Margin="348,10,0,0" VerticalAlignment="Top" Width="75"/>
-                <Button x:Name="btnNext" Content="&gt;" HorizontalAlignment="Left" Margin="746,10,0,0" VerticalAlignment="Top" Width="20"/>
+                <Button x:Name="btnPOIRemove" Content="Удалить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+                <Button x:Name="btnROIRemoveAll" Content="Очистить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75"/>
+                <Button x:Name="btnPOIGenerate" Content="Сгенерировать" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="93" Click="BtnPOIGenerate_Click"/>
+                <Label Content="Пройдено (в м.листе), км:" HorizontalAlignment="Left" Margin="777,97,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbDistance" HorizontalAlignment="Left" Height="26" Margin="933,97,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" IsEnabled="False"/>
+                <Button x:Name="btnExportXLSX" Content="Экспорт в EXCEL" HorizontalAlignment="Left" Margin="581,10,0,0" VerticalAlignment="Top" Width="108" Background="#FF86EE7C" Click="BtnExportXLSX_Click"/>
+                <Button x:Name="btnNext" Content="&gt;" HorizontalAlignment="Left" Margin="746,10,0,0" VerticalAlignment="Top" Width="20" Click="BtnNext_Click"/>
                 <Label x:Name="lblSheets" Content="0/0" HorizontalAlignment="Left" Margin="719,10,0,0" VerticalAlignment="Top" Height="20" Width="27" Padding="2"/>
-                <Button x:Name="btnPrev" Content="&lt;" HorizontalAlignment="Left" Margin="694,10,0,0" VerticalAlignment="Top" Width="20"/>
+                <Button x:Name="btnPrev" Content="&lt;" HorizontalAlignment="Left" Margin="694,10,0,0" VerticalAlignment="Top" Width="20" Click="BtnPrev_Click" />
+                <Label Content="Общее (чек), км:" HorizontalAlignment="Left" Margin="777,66,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbFullDistance" HorizontalAlignment="Left" Height="26" Margin="933,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" IsEnabled="False"/>
+                <Label Content="Остаток бензина, л:" HorizontalAlignment="Left" Margin="777,128,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbFuelResidude" HorizontalAlignment="Left" Height="26" Margin="933,128,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" IsEnabled="False"/>
+                <Label Content="Общее (требуемое), км:" HorizontalAlignment="Left" Margin="777,35,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbMustDistance" HorizontalAlignment="Left" Height="26" Margin="933,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" IsEnabled="False"/>
+                <Label Content="Одометр в конце дня, км:" HorizontalAlignment="Left" Margin="777,159,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbOdometerEndDay" HorizontalAlignment="Left" Height="26" Margin="933,159,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" IsEnabled="False"/>
+                <Label Content="Одометр конечное, км:" HorizontalAlignment="Left" Margin="777,190,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbOdometerEnd" HorizontalAlignment="Left" Height="26" Margin="933,190,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" IsEnabled="False"/>
 
             </Grid>
         </GroupBox>

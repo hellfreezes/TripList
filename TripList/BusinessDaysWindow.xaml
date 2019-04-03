@@ -7,12 +7,10 @@
         mc:Ignorable="d"
         Title="BusinessDaysWindow" Height="450" Width="322.352" Closing="Window_Closing">
     <Grid>
-        <Button x:Name="btnBusinessDayAdd" Content="Добавить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnBusinessDayRemove" Content="Удалить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnBusinessDayImport" Content="Импорт" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75"/>
-        <DataGrid x:Name="dgBusinessDays" Margin="10,35,10,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFD4D4D4" VerticalGridLinesBrush="#FFD4D4D4">
+        <Button x:Name="btnBusinessDayRemove" Content="Удалить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnBusinessDayRemove_Click"/>
+        <Button x:Name="btnBusinessDayImport" Content="Импорт" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <DataGrid x:Name="dgBusinessDays" SelectionUnit="FullRow" SelectionMode="Single" Margin="10,35,10,10" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFD4D4D4" VerticalGridLinesBrush="#FFD4D4D4">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="№ п/п"              Binding="{Binding Id,Mode=TwoWay}"/>
                 <DataGridTemplateColumn Header="Дата">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

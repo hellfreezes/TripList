@@ -11,6 +11,8 @@ namespace TripList
         public Vehicle CurrentVehicle { get; set; }
         public TripListSheet CurrentTripListSheet { get; set; }
 
+        
+
         public void ExportXLSX(string path, string filename)
         {
             Excel excel = new Excel(path + "/Blank.xlsx", 1);

@@ -41,5 +41,10 @@ namespace TripList
             e.Cancel = true;
             this.Visibility = Visibility.Hidden;
         }
+
+        private void BtnWaypointRemove_Click(object sender, RoutedEventArgs e)
+        {
+            mainWindow.GlobalAddressBook.addresses.Remove(mainWindow.GlobalAddressBook.addresses[dgAddresses.SelectedIndex]);
+        }
     }
 }

@@ -36,5 +36,10 @@ namespace TripList
             e.Cancel = true;
             this.Visibility = Visibility.Hidden;
         }
+
+        private void BtnBusinessDayRemove_Click(object sender, RoutedEventArgs e)
+        {
+            mainWindow.GlobalBusinessDaysCalculator.BusinessDays.Remove(mainWindow.GlobalBusinessDaysCalculator.BusinessDays[dgBusinessDays.SelectedIndex]);
+        }
     }
 }

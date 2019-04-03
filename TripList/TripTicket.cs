@@ -18,11 +18,13 @@ namespace TripList
         private bool backToBase = true; //Нужно ли возвращаться на базу каждый раз после посещения очередной точки
         private int averageSpeed = 20; //средняя скорость движения
         private int pause = 15; //время потраченное в точке назначения
-        private TimeSpan endOfWorkDay = new TimeSpan(17, 0, 0); //конец рабочек дня 18:00
+        private double fuelLost = 1.0; //Остаток топлива в конце дня которое можно не переносить на следующий день (топливо не обработается вообще)
+        private TimeSpan endOfWorkDay = new TimeSpan(17, 0, 0); //конец рабочего дня 18:00
         private TimeSpan startOfWorkDay = new TimeSpan(9, 0, 0); //начало рабочего дня 9:00
 
         public int TotalDistance { get; set; } //Всего пройдено на этом чеке
         public int TotalRealDistance { get; set; }
+        public double FuelResidude { get; set; }
         private List<Address> usedPOI; //Лист задействованных адресов (чтобы не использовать их повторно)
         private List<Address> pool; //Тут ссылки на все адреса, которые у нас есть, с ним работаем
         private List<POI> poi; //Тут храним все посещенные точки. Для последующего подставления в XLS файл
@@ -46,6 +48,8 @@ namespace TripList
             usedPOI = new List<Address>();
             pool = MainWindow.Instance.GlobalAddressBook.addresses.ToList();
             poi = new List<POI>();
+
+            UpdateOptions();
         }
 
         public TripTicket(double liters, DateTime date)
@@ -60,6 +64,25 @@ namespace TripList
             usedPOI = new List<Address>();
             pool = MainWindow.Instance.GlobalAddressBook.addresses.ToList();
             poi = new List<POI>();
+
+            UpdateOptions();
+        }
+
+        //Забрать настройки из глобальных настроек программы
+        private void UpdateOptions()
+        {
+            Options o = MainWindow.Instance.CurrentOptions;
+
+            if (MainWindow.Instance.CurrentOptions != null)
+            {
+                inaccuracy = o.Inaccuracy;
+                backToBase = o.BackToBase;
+                averageSpeed = o.AverageSpeed;
+                pause = o.Pause;
+                fuelLost = o.FuelLost;
+                endOfWorkDay = TimeSpan.Parse(o.EndOfWorkDay);
+                startOfWorkDay = TimeSpan.Parse(o.StartOfWorkDay);
+    }
         }
 
         public NextTripTicket Generate()
@@ -91,7 +114,10 @@ namespace TripList
             //дистанцию до точек в счетчик пройденного пути
             while (distance <= TotalDistance - inaccuracy)
             { //с учетом погрешности
-                int r = random.Next(0, pool.Count()); //случайный индекс в диапазоне листа адресов (пула)
+                int min = 0;
+                if (nowBase) // Это чтобы находясь на базе случайно не поехать опять на базу
+                    min++;
+                int r = random.Next(min, pool.Count()); //случайный индекс в диапазоне листа адресов (пула)
 
                 //Если мы не на базе, а нам нужно каждый раз возвращаться на базу, то след адрес у нас БАЗА
                 if (!nowBase && backToBase)
@@ -154,7 +180,7 @@ namespace TripList
                         //Записываем остаток топлива
                         gasLiters = gasLiters - (gasRate * prevDist / 100);
                         prev.FuelResidude = gasLiters;
-                        Console.WriteLine("Осталось топилва: "+gasLiters);
+                        //Console.WriteLine("Осталось топилва: "+gasLiters);
 
                         //Рассчитываем время из предыдущей точки в текущую, на основе дистанции <-----------------------------ВРЕМЯ!!!!!
                         //TimeSpan timeInMinutes = GetTravelTime(averageSpeed, prevDist);
@@ -193,22 +219,32 @@ namespace TripList
 
             TotalRealDistance = distance;
 
+            // По уже созданному маршруту генерируются даты-время пути.
+            // Если требуется создавать один маршрутный на один день,
+            // И если в один день уложиться не удалось, то
+            // ntt веренется не null
+            // А это значит что по данным ntt будет сгенерирован следующий лист на след день
+            // Поэтому:
             NextTripTicket ntt = GenerateTimeAndDate(poi);
             if (ntt != null)
             {
-                TotalRealDistance = 0;
-                int i = 1;
-                poi.RemoveRange(0, ntt.NumberPOI);
+                TotalRealDistance = 0; // Обнуляем пройденный путь в рамках одного листа
+                poi.RemoveRange(ntt.NumberPOI, poi.Count-ntt.NumberPOI); // Удаляем точки которые не будут использоваться данным листом
 
+                // Пробегаемся по всем точкам чтобы...
                 foreach (POI p in poi)
                 {
+                    // ... суммировать весь пройденный путь только по этим точкам
                     TotalRealDistance += p.distToNext;
                 }
 
-                return ntt;
+                return ntt; // вернем данные для генерации след листа
+                            // таким образом, код который вызвал генерацию будет знать что
+                            // генерация была ограничена одинм днем и весь бензин еще не использован
+                            // и генерация должна быть продолжена с использованием выходных данных ntt
             }
 
-            return null;
+            return null; // если ntt вернулось null то генерация след листа не требуется.
         }
 
         private NextTripTicket GenerateTimeAndDate(List<POI> poi)
@@ -261,15 +297,18 @@ namespace TripList
                         //Определяем конец рабочего дня
                         endDT = new DateTime(startTime.Year, startTime.Month, startTime.Day, endOfWorkDay.Hours, endOfWorkDay.Minutes, 0);
                         //startTime = startOfWorkDay;
-                        
-                        // Если нужно создавать новый трип лист каждый раз когда закончился день, то
-                        if (MainWindow.DIVIDE_TRIPTICKETS)
+
+                        FuelResidude = Math.Round(p.FuelResidude);
+                        // Если нужно создавать новый трип лист каждый раз когда закончился день
+                        // и еще достаточно топлива, то
+                        if (MainWindow.DIVIDE_TRIPTICKETS && FuelResidude > fuelLost)
                         {
+                            // Записываем данные для переноса на след день
                             ntt = new NextTripTicket()
                             {
-                                Date = startTime,
-                                Liters = p.FuelResidude,
-                                NumberPOI = i
+                                Date = startTime, //Дата с которой начнется след лист
+                                Liters = p.FuelResidude, //Остаток топлива с которым начнется день
+                                NumberPOI = i //Количество уже пройденных точек (нужно для удаление лишних)
                             };
 
                             return ntt;

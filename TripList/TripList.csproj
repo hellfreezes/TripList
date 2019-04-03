@@ -65,7 +65,12 @@
       <DependentUpon>BusinessDaysWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Excel.cs" />
+    <Compile Include="ExcelDocument.cs" />
     <Compile Include="NextTripTicket.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="POI.cs" />
     <Compile Include="TripListSheet.cs" />
     <Compile Include="TripTicket.cs" />
@@ -91,6 +96,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="OptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WaypointsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

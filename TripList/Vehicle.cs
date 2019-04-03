@@ -14,11 +14,14 @@ namespace TripList
         const string FILENAME = "Vehicle.xml";
 
         public string DriverName { get; set; }
+        public string ShortDriverName { get; set; }
         public string VehicleModel { get; set; }
+        public string License { get; set; }
         public string Plate { get; set; }
         public string Gasoline { get; set; }
         public float GasMileageSummer { get; set; }
         public float GasMileageWinter { get; set; }
+        public int Odometer { get; set; }
 
         public void Save()
         {
@@ -35,13 +38,13 @@ namespace TripList
             }
         }
 
-        public Vehicle Load()
+        public static Vehicle Load(string filename)
         {
             Vehicle loaded = null;
 
             if (File.Exists(FILENAME))
             {
-                using (FileStream fs = new FileStream(FILENAME, FileMode.Open))
+                using (FileStream fs = new FileStream(filename, FileMode.Open))
                 {
                     XmlSerializer xser = new XmlSerializer(typeof(Vehicle));
                     loaded = (Vehicle)xser.Deserialize(fs);

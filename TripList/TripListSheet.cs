@@ -12,10 +12,21 @@ namespace TripList
     public class TripListSheet
     {
         public ObservableCollection<Waypoint> Waypoints;
+        public double AllFuel { get; set; }
+        public double FuelWhenStart { get; set; }
+        public double FuelAtTheEnd { get; set; }
+        public int OdometerStart { get; set; }
+        public int OdometerEnd { get; set; }
+        public int Distance { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+
 
         public TripListSheet()
         {
             Waypoints = new ObservableCollection<Waypoint>();
+            StartTime = new DateTime(1, 1, 1, 0, 0, 0);
+            EndTime = new DateTime(1, 1, 1, 0, 0, 0);
         }
 
         public void AddWaypoint(Waypoint wp)
