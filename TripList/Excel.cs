@@ -67,5 +67,25 @@ namespace TripList
 
             }
         }
+
+        // Определение высоты для ячейки
+        public void AutoFit_MergeCell(_Excel.Worksheet objSheet, string FirstCell, string SecondCell)
+        {
+            //FirstCell - объединенная ячейка, в которой хотим выставить высоту
+            //SecondCell - обыкновенная ячейка, с такой же шириной как и у FirstCell
+
+            //авто выставление высоты объединенных ячеек
+            if (objSheet.get_Range(FirstCell, FirstCell).Value2 != null)    // скопировать текст из объединенной ячейки
+            {
+                objSheet.get_Range(SecondCell, SecondCell).Value2 =
+                    objSheet.get_Range(FirstCell, FirstCell).Value2.ToString();
+            }
+
+            objSheet.get_Range(SecondCell, SecondCell).EntireRow.AutoFit(); //применить автовысоту
+            double CellHeight = objSheet.get_Range(SecondCell, SecondCell).RowHeight;//узнать высоту
+            objSheet.get_Range(SecondCell, SecondCell).Value2 = ""; //очистить ячейку 
+
+            objSheet.get_Range(FirstCell, FirstCell).RowHeight = CellHeight; //и задать нужную высоту для объединенной ячейки
+        }
     }
 }

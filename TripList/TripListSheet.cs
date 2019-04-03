@@ -11,6 +11,7 @@ namespace TripList
 {
     public class TripListSheet
     {
+        public int Id { get; set; }
         public ObservableCollection<Waypoint> Waypoints;
         public double AllFuel { get; set; }
         public double FuelWhenStart { get; set; }

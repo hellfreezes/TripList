@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Office.Interop.Excel;
 
-using _Excel = Microsoft.Office.Interop.Excel;
-
 namespace TripList
 {
     public class ExcelDocument
@@ -15,17 +13,6 @@ namespace TripList
         public Options CurrOptions { get; set; }
 
         private Excel excel;
-        private _Excel.Application ex;
-
-        /*public ExcelDocument(string filename)
-        {
-            ex = new Microsoft.Office.Interop.Excel.Application();
-            ex.Visible = true;
-            ex.Workbooks.Open(filename);
-
-            _Excel.Worksheet sheet = (_Excel.Worksheet)ex.Worksheets.get_Item(1);
-            
-        }*/
 
         public void Export(string filename)
         {
@@ -37,7 +24,11 @@ namespace TripList
             {
                 excel = new Excel(MainWindow.Instance.EXE_DIRECTORY + "/Blank.xlsx", 1);
 
+                excel.ChangeSheet(1); //перворачиваем страницу
+
+                // ********************** мой шаблон 
                 // ЛИЦЕВАЯ СТОРОНА
+                /*
                 excel.WriteToCell(5, 30, ListSheet.Waypoints[0].Date.Day.ToString());
                 excel.WriteToCell(5, 35, ListSheet.Waypoints[0].Date.ToString("MMMM"));
                 excel.WriteToCell(5, 47, ListSheet.Waypoints[0].Date.Year.ToString());
@@ -57,10 +48,41 @@ namespace TripList
                 excel.WriteToCell(19, 73, ListSheet.OdometerStart.ToString());
                 excel.WriteToCell(45, 72, ListSheet.OdometerEnd.ToString());
 
+                
+
+                */ // Конец моего шаблона
+                // ОБОРОТНАЯ СТОРОНА
+
+                TimeSpan fiveMin = new TimeSpan(0, 5, 0);
+                DateTime preStartCtrl = ListSheet.StartTime - fiveMin;
+
+                excel.WriteToCell(5, 28, ListSheet.Waypoints[0].Date.ToShortDateString());
+
+                // Предрейсовый контроль
+                excel.WriteToCell(20, 46, preStartCtrl.ToString("HH:mm") + " " + ListSheet.Waypoints[0].Date.ToShortDateString());
+
+                excel.WriteToCell(30, 31, ListSheet.StartTime.ToString("HH:mm"));
+                excel.WriteToCell(36, 33, ListSheet.EndTime.ToString("HH:mm"));
+
+                excel.WriteToCell(10, 22, vehicle.VehicleModel);
+                excel.WriteToCell(11, 35, vehicle.Plate);
+                excel.WriteToCell(12, 13, vehicle.DriverName);
+                excel.WriteToCell(26, 68, vehicle.ShortDriverName);
+                excel.WriteToCell(29, 58, vehicle.Gasoline);
+                excel.WriteToCell(14, 19, vehicle.License);
+
+                if (ListSheet.Id == 0)
+                    excel.WriteToCell(35, 72, ListSheet.AllFuel.ToString());
+
+
+                excel.WriteToCell(38, 72, ListSheet.FuelWhenStart.ToString());
+                excel.WriteToCell(39, 72, ListSheet.FuelAtTheEnd.ToString());
+                excel.WriteToCell(33, 72, ListSheet.OdometerStart.ToString());
+                excel.WriteToCell(46, 72, ListSheet.OdometerEnd.ToString());
+
                 // ОБОРОТНАЯ СТОРОНА
                 excel.ChangeSheet(2); //перворачиваем страницу
 
-                
 
                 int sR = 5; // Стартовые R - строка, C - колонка
                 int i = 0;
@@ -80,6 +102,7 @@ namespace TripList
                     //---
 
                     excel.WriteToCell(sR + i, 15, wp.Distance.ToString());
+
                     i++;
                 }
 
@@ -88,26 +111,6 @@ namespace TripList
                 excel.Save(filename);
                 excel.Close();
             }
-        }
-
-        // Определение высоты для ячейки
-        public void AutoFit_MergeCell(_Excel.Worksheet objSheet, string FirstCell, string SecondCell)
-        {
-            //FirstCell - объединенная ячейка, в которой хотим выставить высоту
-            //SecondCell - обыкновенная ячейка, с такой же шириной как и у FirstCell
-
-            //авто выставление высоты объединенных ячеек
-            if (objSheet.get_Range(FirstCell, FirstCell).Value2 != null)    // скопировать текст из объединенной ячейки
-            {
-                objSheet.get_Range(SecondCell, SecondCell).Value2 =
-                    objSheet.get_Range(FirstCell, FirstCell).Value2.ToString();
-            }
-
-            objSheet.get_Range(SecondCell, SecondCell).EntireRow.AutoFit(); //применить автовысоту
-            double CellHeight = objSheet.get_Range(SecondCell, SecondCell).RowHeight;//узнать высоту
-            objSheet.get_Range(SecondCell, SecondCell).Value2 = ""; //очистить ячейку 
-
-            objSheet.get_Range(FirstCell, FirstCell).RowHeight = CellHeight; //и задать нужную высоту для объединенной ячейки
         }
     }
 }

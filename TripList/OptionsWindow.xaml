@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TripList"
         mc:Ignorable="d"
-        Title="Настройки" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+        Title="Настройки" Height="450" Width="821.716" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Grid>
         <GroupBox Header="Детальные настройки" Height="162" Margin="10,10,10,0" VerticalAlignment="Top">
             <Grid Margin="10,10,-2,2">
@@ -44,6 +44,7 @@
                         <DataGridTextColumn Header="Марка топлива"       Binding="{Binding Gasoline,Mode=TwoWay}"/>
                         <DataGridTextColumn Header="Летний расход, л/100"       Binding="{Binding GasMileageSummer,Mode=TwoWay}"/>
                         <DataGridTextColumn Header="Зимний расход, л/100"       Binding="{Binding GasMileageWinter,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Дорога домой, км"       Binding="{Binding HomwWay,Mode=TwoWay}"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Button x:Name="btnRemove" Content="Удалить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnRemove_Click"/>

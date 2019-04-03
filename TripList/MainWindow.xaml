@@ -67,7 +67,7 @@
                 <TextBox HorizontalAlignment="Left" Height="26" Margin="142,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False" Background="White"/>
                 <TextBox x:Name="tbGasoline" HorizontalAlignment="Left" Height="26" Margin="142,10,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
                 <Label Content="+ выдано:" HorizontalAlignment="Left" Margin="186,41,0,0" VerticalAlignment="Top" Width="66"/>
-                <TextBox x:Name="tbLiters" HorizontalAlignment="Left" Height="26" Margin="257,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" Text="30" TextChanged="TbLiters_TextChanged" PreviewTextInput="TbLiters_PreviewTextInput" Background="#FF86EE7C"/>
+                <TextBox x:Name="tbLiters" HorizontalAlignment="Left" Height="26" Margin="257,41,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" Text="30" TextChanged="TbLiters_TextChanged" Background="#FF86EE7C"/>
                 <Label Content="при возвращении, л:" HorizontalAlignment="Left" Margin="301,41,0,0" VerticalAlignment="Top" Width="124"/>
                 <TextBox HorizontalAlignment="Left" Height="26" Margin="430,40,0,0" VerticalAlignment="Top" Width="39" MaxLines="1" IsEnabled="False"/>
                 <Label Content="расход л./100 (лето):" HorizontalAlignment="Left" Margin="301,10,0,0" VerticalAlignment="Top" Width="124"/>

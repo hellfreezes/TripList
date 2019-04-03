@@ -82,11 +82,11 @@ namespace TripList
             EXE_DIRECTORY = GetExeDirectory();
         }
 
-        public int GetGasLiters()
+        public double GetGasLiters()
         {
             // Добавить контроль целочисленности на поле
 
-            return int.Parse(tbLiters.Text);
+            return double.Parse(tbLiters.Text);
         }
 
         public double GetGasRateSummer()
@@ -296,10 +296,12 @@ namespace TripList
         // TODO: обработать правильность заполнения и контроль ошибок
         private void BtnPOIGenerate_Click(object sender, RoutedEventArgs e)
         {
+
             // Создаем новый лист
             TripTicket tripTicket = new TripTicket();
             // Создаем хранилище листов
             tripLists = new List<TripTicket>();
+            
             // Помещаем новый лист в хранилище
             tripLists.Add(tripTicket);
             // Генерируем с сохранением выходных данных в ntt
@@ -355,7 +357,11 @@ namespace TripList
         {
             Random rand = new Random();
 
+            
+
             tripList.Clear();
+
+            tripList.Id = currentSheet;
             int i = 0;
             foreach (POI p in tripLists[currentSheet].GetPOIs())
             {
@@ -420,10 +426,15 @@ namespace TripList
             {
                 dist += tripLists[j].TotalRealDistance;
             }
-            int odo = int.Parse(tbOdometerStart.Text) + tripLists[currentSheet].TotalRealDistance + dist;
+
+            //TODO: Косяк по начальному одометру ИСКАТЬ ТУТ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            int homeWay = (CurrentOptions.Vehicles[CurrentOptions.SelectedVehicle].HomeWay * currentSheet);
+            int odo = int.Parse(tbOdometerStart.Text) + tripLists[currentSheet].TotalRealDistance + dist + homeWay;
+
             tbOdometerEndDay.Text = odo.ToString();
 
             tripList.Distance = tripLists[currentSheet].TotalRealDistance;
+            
             tripList.OdometerStart = odo - tripLists[currentSheet].TotalRealDistance; // Показание на начало дня (значение за вычетом пройденного за сегодня пути)
             tripList.OdometerEnd = odo + dist; // Показания на конец дня
 
@@ -503,7 +514,7 @@ namespace TripList
             if (tbLiters.Text == string.Empty)
                 tbLiters.Text = "0";
             if (CurrentOptions != null)
-                CurrentOptions.Liters = int.Parse(tbLiters.Text);
+                CurrentOptions.Liters = double.Parse(tbLiters.Text);
         }
 
         private void TbLiters_PreviewTextInput(object sender, TextCompositionEventArgs e)

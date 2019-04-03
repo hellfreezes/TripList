@@ -21,7 +21,7 @@ namespace TripList
         public string EndOfWorkDay { get; set; } //конец рабочего дня 18:00
         public string StartOfWorkDay { get; set; } //начало рабочего дня 9:00
         public int SelectedVehicle { get; set; }
-        public int Liters { get; set; }
+        public double Liters { get; set; }
         public string Time { get; set; }
 
         public bool ShowContragent { get; set; }

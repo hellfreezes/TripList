@@ -22,6 +22,7 @@ namespace TripList
         public float GasMileageSummer { get; set; }
         public float GasMileageWinter { get; set; }
         public int Odometer { get; set; }
+        public int HomeWay { get; set; }
 
         public void Save()
         {
