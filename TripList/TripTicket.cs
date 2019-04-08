@@ -12,6 +12,9 @@ namespace TripList
         private double      gasRateWinter;  //Расход
         private double      gasLiters;      //Количество литров
         private DateTime    receiptDate;    //Дата чека
+        private int         homeWay;        //Расстояние до дома
+        private int         lastListOdo;    //Показания одометра из предыдущего листа
+
 
         //TODO: эти величины должны изменяться продвинутыми настройками из программы
         private int inaccuracy = 10; //Допустимая погрешность в киллометраже +/-
@@ -21,10 +24,20 @@ namespace TripList
         private double fuelLost = 1.0; //Остаток топлива в конце дня которое можно не переносить на следующий день (топливо не обработается вообще)
         private TimeSpan endOfWorkDay = new TimeSpan(17, 0, 0); //конец рабочего дня 18:00
         private TimeSpan startOfWorkDay = new TimeSpan(9, 0, 0); //начало рабочего дня 9:00
+        
 
+        public int Id { get; set; }
         public int TotalDistance { get; set; } //Всего пройдено на этом чеке
         public int TotalRealDistance { get; set; }
+        public int LastTotalDistance { get; set; } // Общий путь по предыдущим путивым листам
+
         public double FuelResidude { get; set; }
+        public int OdometerStartDay { get; set; }
+        public int OdometerEndDay { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+
+
         private List<Address> usedPOI; //Лист задействованных адресов (чтобы не использовать их повторно)
         private List<Address> pool; //Тут ссылки на все адреса, которые у нас есть, с ним работаем
         private List<POI> poi; //Тут храним все посещенные точки. Для последующего подставления в XLS файл
@@ -40,10 +53,14 @@ namespace TripList
         {
             random = new Random();
 
+            Id = 0;
+
             gasRateSummer = MainWindow.Instance.GetGasRateSummer();
             gasRateWinter = MainWindow.Instance.GetGasRateWinter();
             gasLiters = MainWindow.Instance.GetGasLiters();
             receiptDate = MainWindow.Instance.GetReceiptDate();
+            homeWay = MainWindow.Instance.CurrentOptions.Vehicles[MainWindow.Instance.CurrentOptions.SelectedVehicle].HomeWay;
+            lastListOdo = 0;
 
             usedPOI = new List<Address>();
             pool = MainWindow.Instance.GlobalAddressBook.addresses.ToList();
@@ -52,14 +69,19 @@ namespace TripList
             UpdateOptions();
         }
 
-        public TripTicket(double liters, DateTime date)
+        public TripTicket(double liters, DateTime date, int id, int lastListOdometer)
         {
             random = new Random();
 
+            lastListOdo = lastListOdometer;
+            Id = id;
+
+            homeWay = MainWindow.Instance.CurrentOptions.Vehicles[MainWindow.Instance.CurrentOptions.SelectedVehicle].HomeWay;
             gasRateSummer = MainWindow.Instance.GetGasRateSummer();
             gasRateWinter = MainWindow.Instance.GetGasRateWinter();
             gasLiters = liters;
             receiptDate = date;
+
 
             usedPOI = new List<Address>();
             pool = MainWindow.Instance.GlobalAddressBook.addresses.ToList();
@@ -226,6 +248,12 @@ namespace TripList
             // А это значит что по данным ntt будет сгенерирован следующий лист на след день
             // Поэтому:
             NextTripTicket ntt = GenerateTimeAndDate(poi);
+
+            // В пробег начального дня прибавляется путь до дома
+            // ПЛЮС путь ОТ дома (чтоб туда обратно получилось)
+            if (Id != 0)
+                OdometerStartDay = lastListOdo + homeWay * 2;
+
             if (ntt != null)
             {
                 TotalRealDistance = 0; // Обнуляем пройденный путь в рамках одного листа
@@ -238,13 +266,31 @@ namespace TripList
                     TotalRealDistance += p.distToNext;
                 }
 
-                return ntt; // вернем данные для генерации след листа
-                            // таким образом, код который вызвал генерацию будет знать что
-                            // генерация была ограничена одинм днем и весь бензин еще не использован
-                            // и генерация должна быть продолжена с использованием выходных данных ntt
+                ntt.OdometerEndDay = OdometerStartDay + TotalRealDistance;
+
+                //return ntt; <Возвращаем ниже>// вернем данные для генерации след листа
+                              // таким образом, код который вызвал генерацию будет знать что
+                              // генерация была ограничена одинм днем и весь бензин еще не использован
+                              // и генерация должна быть продолжена с использованием выходных данных ntt
             }
 
-            return null; // если ntt вернулось null то генерация след листа не требуется.
+            OdometerEndDay = OdometerStartDay + TotalRealDistance;
+
+            TimeSpan randTime = new TimeSpan(0, random.Next(2, 15), 0);
+            // Время Выезда по путевому
+            StartTime = poi[0].timeDeparture - randTime;
+
+            randTime = new TimeSpan(0, random.Next(2, 15), 0);
+            int k = poi.Count - 1;
+
+            // TODO: Это костыль:
+            //       Иногда последняя точка путая и время у нее равно нулю. Поэтому вернем индекс предпоследней
+            if (poi[k].timeArrive == new DateTime(1, 1, 1, 0, 0, 0))
+                k--;
+            // Время приезда по путевому
+            EndTime = poi[k].timeArrive + randTime;
+
+            return ntt; // если ntt вернулось null то генерация след листа не требуется.
         }
 
         private NextTripTicket GenerateTimeAndDate(List<POI> poi)
@@ -306,6 +352,7 @@ namespace TripList
                             // Записываем данные для переноса на след день
                             ntt = new NextTripTicket()
                             {
+                                NextIndex = Id + 1, // Id следующего путевого листа
                                 Date = startTime, //Дата с которой начнется след лист
                                 Liters = p.FuelResidude, //Остаток топлива с которым начнется день
                                 NumberPOI = i //Количество уже пройденных точек (нужно для удаление лишних)

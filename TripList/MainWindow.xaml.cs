@@ -26,6 +26,8 @@ namespace TripList
     {
         private static readonly Regex _regex = new Regex("[^0-9-]+");
 
+        public const string VERSION = "Версия: 0.02 Альфа (без контроля ошибок)";
+
         public AddressBook GlobalAddressBook { get; set; }
         public BusinessDaysCalculator GlobalBusinessDaysCalculator { get; set; }
         public List<Vehicle> Vehicles { get; set; }
@@ -38,6 +40,7 @@ namespace TripList
         private WaypointsWindow windowWaypoints;
         private BusinessDaysWindow windowBusinessDays;
         private OptionsWindow windowOptions;
+        private AboutWindow windowAbout;
 
         public string EXE_DIRECTORY;
         // Нужно ли создавать новый маршрутный лист если день закончен а топливо еще осталось
@@ -56,6 +59,8 @@ namespace TripList
 
             InitializeComponent();
 
+            winMain.Title += " " + VERSION;
+
             LoadAll();
 
             //GlobalAddressBook = new AddressBook();//AddressBook.LoadFromSQL();
@@ -66,6 +71,7 @@ namespace TripList
             windowOptions = new OptionsWindow();
             windowWaypoints = new WaypointsWindow(this);
             windowBusinessDays = new BusinessDaysWindow(this);
+            windowAbout = new AboutWindow();
 
             if (CurrentOptions.Vehicles.Count > 0)
             {
@@ -184,6 +190,7 @@ namespace TripList
             windowBusinessDays.Close();
             windowWaypoints.Close();
             windowOptions.Close();
+            windowAbout.Close();
         }
 
         private void MnuTest2_Click(object sender, RoutedEventArgs e)
@@ -290,6 +297,7 @@ namespace TripList
             windowWaypoints.Owner = this;
             windowBusinessDays.Owner = this;
             windowOptions.Owner = this;
+            windowAbout.Owner = this;
         }
 
         // Пользователь запросил генерацию листов по введенным данным
@@ -316,7 +324,7 @@ namespace TripList
             // Будем продолжать генерацию новых листов пока она требуется (ntt не равно null)
             while (ntt != null)
             {
-                tripTicket = new TripTicket(ntt.Liters, ntt.Date);
+                tripTicket = new TripTicket(ntt.Liters, ntt.Date, ntt.NextIndex, ntt.OdometerEndDay);
                 ntt = tripTicket.Generate();
                 // Суммируем пройденный путь
                 realDistance += tripTicket.TotalRealDistance;
@@ -331,7 +339,11 @@ namespace TripList
             // ИНТЕРФЕЙС:
             // Отобразисть суммарное количество пройденного пути
             tbFullDistance.Text = realDistance.ToString();
-            tbOdometerEnd.Text = (int.Parse(tbOdometerStart.Text) + realDistance).ToString();
+
+            // Показания дометра на конец чека
+            // с добавлением пройденного пути от дома и обратно
+            tbOdometerEnd.Text = (int.Parse(tbOdometerStart.Text) + realDistance + 
+                                    ((tripLists.Count-1)*CurrentOptions.Vehicles[CurrentOptions.SelectedVehicle].HomeWay*2)).ToString();
         }
 
         private void BtnNext_Click(object sender, RoutedEventArgs e)
@@ -408,35 +420,18 @@ namespace TripList
             }
 
             // Время выезда/приезда
-            TimeSpan randTime = new TimeSpan(0, rand.Next(2, 15), 0);
-            tripList.StartTime = tripLists[currentSheet].GetPOIs()[0].timeDeparture - randTime;
+            tripList.StartTime = tripLists[currentSheet].StartTime;
+            tripList.EndTime = tripLists[currentSheet].EndTime;
 
-            randTime = new TimeSpan(0, rand.Next(2, 15), 0);
-            int k = tripLists[currentSheet].GetPOIs().Count - 1;
-
-            if (tripLists[currentSheet].GetPOIs()[k].timeArrive == new DateTime(1,1,1,0,0,0))
-                k--;
-
-            tripList.EndTime = tripLists[currentSheet].GetPOIs()[k].timeArrive + randTime;
-            //Console.WriteLine(tripList.EndTime.ToShortTimeString());
-
-            // Показание одометра в конце дня по листу
-            int dist = 0;
-            for (int j = 0; j < currentSheet; j++)
-            {
-                dist += tripLists[j].TotalRealDistance;
-            }
-
-            //TODO: Косяк по начальному одометру ИСКАТЬ ТУТ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            int homeWay = (CurrentOptions.Vehicles[CurrentOptions.SelectedVehicle].HomeWay * currentSheet);
-            int odo = int.Parse(tbOdometerStart.Text) + tripLists[currentSheet].TotalRealDistance + dist + homeWay;
-
-            tbOdometerEndDay.Text = odo.ToString();
+            // Начальные показания одометра
+            int odometer = int.Parse(tbOdometerStart.Text);
 
             tripList.Distance = tripLists[currentSheet].TotalRealDistance;
-            
-            tripList.OdometerStart = odo - tripLists[currentSheet].TotalRealDistance; // Показание на начало дня (значение за вычетом пройденного за сегодня пути)
-            tripList.OdometerEnd = odo + dist; // Показания на конец дня
+
+            tripList.OdometerStart = odometer + tripLists[currentSheet].OdometerStartDay;//odo - tripLists[currentSheet].TotalRealDistance; // Показание на начало дня (значение за вычетом пройденного за сегодня пути)
+            tripList.OdometerEnd = odometer + tripLists[currentSheet].OdometerEndDay;//odo + dist; // Показания на конец дня
+
+            tbOdometerEndDay.Text = tripList.OdometerEnd.ToString();//odo.ToString();
 
             tripList.AllFuel = double.Parse(tbLiters.Text);
 
@@ -530,7 +525,7 @@ namespace TripList
         // Вызов окна о программе
         private void MnuAbout_Click(object sender, RoutedEventArgs e)
         {
-
+            windowAbout.Show();
         }
 
         private void BtnExportXLSX_Click(object sender, RoutedEventArgs e)

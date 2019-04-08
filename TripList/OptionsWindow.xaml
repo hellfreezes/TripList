@@ -44,7 +44,7 @@
                         <DataGridTextColumn Header="Марка топлива"       Binding="{Binding Gasoline,Mode=TwoWay}"/>
                         <DataGridTextColumn Header="Летний расход, л/100"       Binding="{Binding GasMileageSummer,Mode=TwoWay}"/>
                         <DataGridTextColumn Header="Зимний расход, л/100"       Binding="{Binding GasMileageWinter,Mode=TwoWay}"/>
-                        <DataGridTextColumn Header="Дорога домой, км"       Binding="{Binding HomwWay,Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Дорога домой, км"       Binding="{Binding HomeWay,Mode=TwoWay}"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Button x:Name="btnRemove" Content="Удалить" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnRemove_Click"/>
