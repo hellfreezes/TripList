@@ -53,5 +53,24 @@ namespace TripList
 
             return loaded;
         }
+
+        public int IsBusinessDay(DateTime date)
+        {
+            foreach (BusinessDay day in BusinessDays)
+            {
+                if (day.Date == date)
+                {
+                    if (day.IsBusiness)
+                    {
+                        return 1; //рабочий
+                    } else
+                    {
+                        return 2; //нерабочий
+                    }
+                }
+            }
+
+            return 0; // день не найден
+        }
     }
 }

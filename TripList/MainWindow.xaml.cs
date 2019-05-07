@@ -26,7 +26,7 @@ namespace TripList
     {
         private static readonly Regex _regex = new Regex("[^0-9-]+");
 
-        public const string VERSION = "Версия: 0.02 Альфа (без контроля ошибок)";
+        public const string VERSION = "Версия: 0.03 Альфа (без контроля ошибок)";
 
         public AddressBook GlobalAddressBook { get; set; }
         public BusinessDaysCalculator GlobalBusinessDaysCalculator { get; set; }

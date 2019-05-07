@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -299,6 +300,8 @@ namespace TripList
 
             NextTripTicket ntt = null;
 
+            BusinessDaysCalculator businessDays = MainWindow.Instance.GlobalBusinessDaysCalculator;
+
             // Стартовая дата в чеке
             DateTime startTime = receiptDate;
 
@@ -331,12 +334,15 @@ namespace TripList
 
                     if ((startTime.AddMinutes(p.next.toNextPOI.TotalMinutes * 2) > endDT) && !p.address.IsBase)
                     {
+                        DateTime checkDay;
                         //Если не хватит то переключаем день на следующий
                         do
                         { //Меняем день до тех пор пока он не станет следующим РАБОЧИМ днем
                             startTime = startTime.AddDays(1);
+                            checkDay = new DateTime(startTime.Year, startTime.Month, startTime.Day);
 
-                        } while (startTime.DayOfWeek == DayOfWeek.Saturday || startTime.DayOfWeek == DayOfWeek.Sunday);
+                        } while (((startTime.DayOfWeek == DayOfWeek.Saturday || startTime.DayOfWeek == DayOfWeek.Sunday) && (businessDays.IsBusinessDay(checkDay) != 1)) || // если это выходной и не является принудительно рабочим
+                                    businessDays.IsBusinessDay(checkDay) == 2); // если это любой другой день, но он объявлен нерабочим
 
                         //Переводим стартовое время на начало рабочего дня
                         startTime = new DateTime(startTime.Year, startTime.Month, startTime.Day, startOfWorkDay.Hours, startOfWorkDay.Minutes, 0);

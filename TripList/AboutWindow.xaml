@@ -9,7 +9,7 @@
     <Grid>
         <Label Content="Генератор путевых листов" HorizontalAlignment="Left" Margin="95,22,0,0" VerticalAlignment="Top" Width="247" FontSize="18" FontWeight="Bold"/>
         <Label x:Name="lblVersion" Content="Label" HorizontalAlignment="Left" Margin="80,56,0,0" VerticalAlignment="Top" Width="262"/>
-        <Image HorizontalAlignment="Left" Height="100" Margin="173,87,0,0" VerticalAlignment="Top" Width="100" IsEnabled="False" Source="k986yFK1.png"/>
+        <Image HorizontalAlignment="Left" Height="100" Margin="173,87,0,0" VerticalAlignment="Top" Width="100" IsEnabled="False" Source="pack://application:,,,/Resources/k986yFK1.png"/>
 
     </Grid>
 </Window>
